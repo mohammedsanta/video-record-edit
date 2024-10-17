@@ -1,334 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enhanced Screen Recorder</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f0f4f8;
-      color: #333;
-      text-align: center;
-      padding: 20px;
-    }
-    h1 {
-      color: #4a90e2;
-      margin-bottom: 20px;
-    }
-    form {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      display: inline-block;
-      padding: 20px;
-      width: 100%;
-      max-width: 600px;
-      animation: fadeIn 1s ease-out;
-      position: relative;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-    input[type="text"], textarea {
-      width: calc(100% - 22px);
-      padding: 10px;
-      margin-bottom: 20px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin: 5px;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    button:hover {
-      background-color: #357abd;
-      transform: scale(1.05);
-    }
-    button:disabled {
-      background-color: #b0bec5;
-      cursor: not-allowed;
-    }
-    #status {
-      margin-top: 20px;
-      font-weight: bold;
-    }
-    #preview {
-      width: 100%;
-      max-width: 600px;
-      margin-top: 20px;
-      display: none;
-    }
-    progress, #uploadProgress {
-      width: 100%;
-      max-width: 600px;
-      margin-top: 20px;
-      display: none;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    #controls, #confirmation, #editButton {
-      margin-bottom: 20px;
-      display: none; /* Initially hide controls */
-    }
-    #error-message {
-      color: red;
-      margin-top: 10px;
-      font-weight: bold;
-      display: none; /* Initially hide error message */
-      animation: shake 0.5s ease-out;
-    }
-    @keyframes shake {
-      0% { transform: translateX(0); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
-      100% { transform: translateX(0); }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Recorder with Dark Mode</title>
+    <link rel="stylesheet" href="style/recordAndUpload.css">
 </head>
 <body>
-  <h1>Enhanced Screen Recorder</h1>
+
+  <div class="section">
+
+    <h1>Screen Recorder with Dark Mode</h1>
+
+    <div class="border" style="width: 602px;height: 365px;border: 1px solid;">
+
+      <video id="recordedVideo" controls></video>
+      <video id="previewVideo" autoplay muted></video>
+
+    </div>
+
+
+    <div style="display: flex;align-items: center;gap: 1rem;">
+      <div id="startBtn">      
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="26" fill="#C82D3F"></circle><rect x="1" y="1" width="62" height="62" rx="31" stroke="white" fill="none" stroke-opacity="0.2" stroke-width="2"></rect></svg>
+      </div>
+      <div id="pauseBtn">    
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M3 4.2a2 2 0 1 1 4 0v11.6a2 2 0 1 1-4 0V4.2Zm10 0a2 2 0 1 1 4 0v11.6a2 2 0 1 1-4 0V4.2Z"></path></svg>
+      </div>
+      <div id="resumeBtn" class="button" disabled>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M5.28 1.64a.83.83 0 0 0-1.28.7v15.31a.83.83 0 0 0 1.28.7l12.1-7.65a.83.83 0 0 0 0-1.4L5.29 1.64Z"></path></svg>
+      </div>
+      <div id="stopBtn">
+        <svg class="media-recorder-stop-recording-button__svg" width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="26" fill="white"></circle><rect x="22" y="22" width="20" height="20" rx="5" fill="#C82D3F"></rect><rect x="1" y="1" width="62" height="62" rx="31" stroke="white" stroke-opacity="0.2" stroke-width="2" fill="none"></rect></svg>
+      </div>
+      <div id="recordAgain" style="display: none;">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M10.3 3.2c.2-.7-.3-1.5-1-1.4-1.9.2-3.7 1-5.1 2.4-3 2.9-3.2 7.5-.8 10.8h-.8c-.6 0-1.1.4-1.1 1 0 .3.1.6.3.8.2.2.5.3.8.3h3.8c.6 0 1.1-.5 1.1-1.1v-3.8c0-.6-.5-1.1-1.1-1.1-.6 0-1.1.5-1.1 1.1v1.6a5.98 5.98 0 0 1 3.9-9.7c.5-.1 1-.4 1.1-.9zm-3.9 8.1zm11-6.3c.6 0 1.1-.5 1.1-1.1 0-.3-.1-.6-.3-.8-.2-.1-.5-.2-.8-.2v.2-.2h-3.8c-.6 0-1.1.5-1.1 1.1v3.8c0 .6.5 1.1 1.1 1.1.6 0 1.1-.5 1.1-1.1V6.2c1.9 2.4 1.8 5.9-.4 8.1-1 1-2.2 1.5-3.5 1.7-.4.1-.9.3-1 .8-.3.7.2 1.5 1 1.5A8.38 8.38 0 0 0 16.6 5h.8z"></path></svg>
+      </div>
   
-  <form id="uploadForm">
-    <div>
-      <label for="title">Title:</label>
-      <input type="text" id="title" name="title" required>
     </div>
-    <div>
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" rows="4" cols="50" required></textarea>
-    </div>
-    <div id="confirmation">
-      <button type="button" id="confirmButton">Confirm</button>
-    </div>
-    <div id="controls">
-      <button type="button" id="startButton" disabled>Start Recording</button>
-      <button type="button" id="pauseButton" disabled>Pause Recording</button>
-      <button type="button" id="resumeButton" disabled>Resume Recording</button>
-      <button type="button" id="stopButton" disabled>Stop Recording</button>
-      <button type="button" id="nextButton" disabled>Next</button>
-    </div>
-    <div id="editButton">
-      <button type="button" id="editTitleButton">Edit Title</button>
-    </div>
-    <div id="uploadButton">
-      <button type="button" id="uploadButton">Upload</button>
-    </div>
-    <div id="status"></div>
-    <video id="preview" controls></video>
-    <progress id="uploadProgress" value="0" max="100"></progress>
-    <div id="error-message">Please enter both a title and description.</div>
-  </form>
 
-  <script>
-    let mediaRecorder;
-    let chunks = [];
-    let stream;
-    let startTime;
-    let pauseStartTime;
-    let totalPausedDuration = 0;
-    let timerInterval;
-    let videoBlob;
-    let isPaused = false;
+  </div>
 
-    function updateRecordingTime() {
-      if (!startTime) return;
-      const currentTime = Date.now();
-      const elapsed = Math.floor((currentTime - startTime - totalPausedDuration) / 1000);
-      document.getElementById('status').textContent = `Recording Duration: ${elapsed}s`;
-    }
+    
 
-    function startTimer() {
-      timerInterval = setInterval(updateRecordingTime, 1000);
-    }
+    <script src="/js/recordAndUpload.js">
 
-    function stopTimer() {
-      clearInterval(timerInterval);
-    }
-
-    function stopStream() {
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-      }
-    }
-
-    function checkFields() {
-      const title = document.getElementById('title').value.trim();
-      const description = document.getElementById('description').value.trim();
-      const controls = document.getElementById('controls');
-      const confirmation = document.getElementById('confirmation');
-      const errorMessage = document.getElementById('error-message');
-      if (title && description) {
-        confirmation.style.display = 'block';
-        errorMessage.style.display = 'none';
-      } else {
-        confirmation.style.display = 'none';
-        if (!title || !description) {
-          errorMessage.style.display = 'block';
-        }
-      }
-    }
-
-    document.getElementById('title').addEventListener('input', checkFields);
-    document.getElementById('description').addEventListener('input', checkFields);
-
-    document.getElementById('confirmButton').addEventListener('click', () => {
-      const title = document.getElementById('title').value.trim();
-      const description = document.getElementById('description').value.trim();
-      if (title && description) {
-        document.getElementById('confirmation').style.display = 'none';
-        document.getElementById('controls').style.display = 'block';
-        document.getElementById('startButton').disabled = false;
-      }
-    });
-
-    document.getElementById('startButton').addEventListener('click', () => {
-      navigator.mediaDevices.getDisplayMedia({ video: true, audio: true })
-        .then(userStream => {
-          stream = userStream;
-          mediaRecorder = new MediaRecorder(stream);
-
-          mediaRecorder.ondataavailable = event => {
-            chunks.push(event.data);
-          };
-
-          mediaRecorder.onstart = () => {
-            startTime = Date.now();
-            startTimer();
-            document.getElementById('title').disabled = true;
-            document.getElementById('description').disabled = true;
-          };
-
-          mediaRecorder.onstop = () => {
-            stopTimer();
-            stopStream(); // Ensure to stop the stream when recording stops
-            videoBlob = new Blob(chunks, { type: 'video/webm' });
-            const title = document.getElementById('title').value.trim();
-            const url = URL.createObjectURL(videoBlob);
-            document.getElementById('preview').src = url;
-            document.getElementById('preview').style.display = 'block';
-            document.getElementById('editButton').style.display = 'block';
-            document.getElementById('uploadButton').style.display = 'block'; // Show Upload button
-            document.getElementById('controls').style.display = 'none';
-            document.getElementById('status').textContent = 'Recording stopped. You can now edit the title or upload the video.';
-          };
-
-          mediaRecorder.start();
-          document.getElementById('startButton').disabled = true;
-          document.getElementById('pauseButton').disabled = false;
-          document.getElementById('stopButton').disabled = false;
-          document.getElementById('status').textContent = 'Recording...';
-        })
-        .catch(err => {
-          console.error('Error accessing display media.', err);
-          document.getElementById('status').textContent = 'Error accessing display media.';
-        });
-    });
-
-    document.getElementById('pauseButton').addEventListener('click', () => {
-      if (mediaRecorder && mediaRecorder.state === 'recording') {
-        mediaRecorder.pause();
-        pauseStartTime = Date.now();
-        isPaused = true;
-        document.getElementById('pauseButton').disabled = true;
-        document.getElementById('resumeButton').disabled = false;
-        document.getElementById('status').textContent = 'Recording paused.';
-      }
-    });
-
-    document.getElementById('resumeButton').addEventListener('click', () => {
-      if (mediaRecorder && mediaRecorder.state === 'paused') {
-        mediaRecorder.resume();
-        totalPausedDuration += Date.now() - pauseStartTime;
-        isPaused = false;
-        document.getElementById('resumeButton').disabled = true;
-        document.getElementById('pauseButton').disabled = false;
-        document.getElementById('status').textContent = 'Recording resumed.';
-      }
-    });
-
-    document.getElementById('stopButton').addEventListener('click', () => {
-      if (mediaRecorder) {
-        mediaRecorder.stop();
-        document.getElementById('startButton').disabled = false;
-        document.getElementById('pauseButton').disabled = true;
-        document.getElementById('resumeButton').disabled = true;
-        document.getElementById('stopButton').disabled = true;
-        document.getElementById('status').textContent = 'Processing...';
-      }
-    });
-
-    document.getElementById('editTitleButton').addEventListener('click', () => {
-      document.getElementById('title').disabled = false;
-      document.getElementById('description').disabled = false;
-      document.getElementById('editTitleButton').disabled = true;
-    });
-
-    document.getElementById('uploadButton').addEventListener('click', () => {
-      if (videoBlob) {
-        const title = document.getElementById('title').value.trim();
-        uploadVideo(videoBlob, title);
-      } else {
-        alert('Please record a video before uploading.');
-      }
-    });
-
-    function uploadVideo(blob, title) {
-      const formData = new FormData();
-      formData.append('video', blob, `${title}.webm`);
-      formData.append('title', title);
-
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', 'http://127.0.0.1:3000/upload/video', true);
-
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable) {
-          const percentComplete = (event.loaded / event.total) * 100;
-          document.getElementById('uploadProgress').value = percentComplete;
-        }
-      };
-
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          document.getElementById('status').textContent = 'Upload complete!';
-          document.getElementById('uploadProgress').style.display = 'none';
-        } else {
-          document.getElementById('status').textContent = 'Upload failed.';
-        }
-      };
-
-      xhr.onerror = () => {
-        document.getElementById('status').textContent = 'Upload failed. Please try again.';
-        document.getElementById('uploadProgress').style.display = 'none';
-      };
-
-      xhr.send(formData);
-      document.getElementById('uploadProgress').style.display = 'block';
-    }
-
-    document.getElementById('nextButton').addEventListener('click', () => {
-      if (videoBlob) {
-        const title = encodeURIComponent(document.getElementById('title').value.trim());
-        const description = encodeURIComponent(document.getElementById('description').value.trim());
-        const url = `http://127.0.0.1:3000/editing?title=${title}&description=${description}`;
-        window.location.href = url;
-      } else {
-        alert('Please record and upload a video before proceeding.');
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>

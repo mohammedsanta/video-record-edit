@@ -1,0 +1,343 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    margin: 0;
+    display: flex;
+    position: relative;
+}
+.sidebar {
+    width: 250px;
+    background: #1e1e1e;
+    padding: 20px;
+    height: 100vh;
+    position: fixed;
+}
+.sidebar h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: center;
+}
+.sidebar a {
+    color: #e0e0e0;
+    text-decoration: none;
+    display: block;
+    margin: 15px 0;
+    padding: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+    background-color: #121212;
+    width: calc(100% - 270px);
+}
+.container {
+    display: none; /* Hide sections by default */
+    background: #1e1e1e;
+    border-radius: 5px;
+    padding: 20px;
+    margin: 20px 3rem;
+}
+.container.active {
+    display: block; /* Show active section */
+}
+h1, h2 {
+    color: #ffffff;
+    text-align: center;
+}
+.video-list {
+    list-style-type: none;
+    padding: 0;
+}
+.video-item {
+    padding: 10px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+}
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #0056b3;
+}
+.delete-button {
+    background-color: #ff4d4d;
+    margin-left: 10px;
+}
+.delete-button:hover {
+    background-color: #ff1a1a;
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Start Video */
+
+.modal-video {
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: hidden; /* Disable scroll */
+    background-color: rgba(0, 0, 0, 0.85); /* Dark overlay with opacity */
+    justify-content: center; /* Center the modal */
+    align-items: center; /* Center the modal */
+}
+
+.modal-video-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background-color: #1e1e1e;
+    margin: auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+    max-width: 90%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px;
+}
+
+.close {
+    color: #ffffff; /* Close button color */
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #ff4081; /* Change color on hover */
+}
+
+video {
+    width: 100%; /* Full width of the modal */
+    border-radius: 4px; /* Rounded corners for video */
+    outline: none; /* Remove outline */
+}
+
+.vide-button {
+    background-color: #ff4081; /* Button color */
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.vide-button:hover {
+    background-color: #e91e63; /* Darker shade on hover */
+}
+
+.vide-button:focus {
+    outline: none; /* Remove outline when focused */
+}
+
+/* End Video */
+
+/* Start Session */
+
+.session-boxes {
+    display: flex;
+    flex-direction: column;
+}
+
+.session-box {
+    border: 1px solid #444;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    background-color: #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.edit-input {
+    display: none;
+    margin: 1.5rem;
+}
+
+.session-btn-container {
+
+}
+
+.save-btn {
+    display: none; /* Hidden by default */
+}
+
+.hidden {
+    display: none;
+}
+
+/* Modal styles */
+.modal {
+    justify-content: center;
+    align-items: center;
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgb(0,0,0); 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #333333;
+    color: #ffffff;
+    margin: 10% auto;
+    padding: 30px;
+    border-radius: 12px;
+    border: none;
+    width: 20%;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+}
+
+.modal-content:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+}
+
+/* Optional: Add styles for headings and buttons */
+.modal-content h1, 
+.modal-content h2, 
+.modal-content h3 {
+    color: #ffffff; /* White text for headings */
+}
+
+.modal-content button {
+    background-color: #5a5a5a; /* Button background */
+    color: #ffffff; /* Button text color */
+    border: none; /* No border */
+    padding: 10px 20px; /* Padding for buttons */
+    border-radius: 5px; /* Rounded button corners */
+    cursor: pointer; /* Pointer on hover */
+    transition: background-color 0.3s; /* Smooth background color change */
+}
+
+.modal-content button:hover {
+    background-color: #777777; /* Lighter on hover */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#video-session-list {
+    list-style-type: none; /* Remove default bullets */
+    padding: 0;
+    margin: 0;
+    max-width: 400px; /* Set a max width */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* White text color */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); /* Shadow effect */
+}
+
+#video-session-list li {
+    padding: 15px; /* Add padding */
+    border-bottom: 1px solid #444; /* Darker separator line */
+    transition: background-color 0.3s; /* Smooth background color change */
+}
+
+#video-session-list li:last-child {
+    border-bottom: none; /* Remove bottom border from last item */
+}
+
+#video-session-list li:hover {
+    background-color: #1e1e1e; /* Highlight on hover */
+}
+
+.remove-vid-session {
+    background-color: transparent; /* Transparent background */
+    color: #ff4d4d; /* Red color for the delete button */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 18px; /* Increase font size */
+    margin-left: 10px; /* Space between text and button */
+    transition: color 0.3s; /* Smooth color change */
+}
+
+.remove-vid-session:hover {
+    color: #ff1a1a; /* Darker red on hover */
+}
+
+#video-session-list li {
+    justify-content: space-between; /* Space between text and button */
+    align-items: center; /* Center items vertically */
+    padding: 15px;
+    border-bottom: 1px solid #444;
+    transition: background-color 0.3s;
+}
+
+
+
+
+/* End Session */

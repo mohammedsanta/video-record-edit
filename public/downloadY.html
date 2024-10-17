@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Format Fetcher</title>
+    <link rel="stylesheet" href="style/downloadYoutube.css">
+</head>
+<body>
+    <h1>YouTube Format Fetcher</h1>
+    <form id="urlForm">
+        <input type="text" id="url" placeholder="Enter YouTube video URL" required>
+        <button type="submit">Fetch Formats</button>
+    </form>
+
+
+    <div id="message" class="hidden"></div>
+
+    <div id="title"></div>
+    <div id="thumbnail" style="display: none;">
+        <img id="imgThumbnail" src="" style="width: 300px;">
+    </div>
+
+    <h2>Video Formats</h2>
+    <select id="videoSelect"></select>
+    <h2>Audio Formats</h2>
+    <select id="audioSelect"></select>
+    
+    <button id="downloadButton" class="hidden">Download Selected Formats</button>
+
+    <table id="formatsTable" style="display:none;">
+        <thead>
+            <tr>
+                <th>Format Code</th>
+                <th>Extension</th>
+                <th>Resolution</th>
+                <th>Size</th>
+                <th>Bitrate</th>
+            </tr>
+        </thead>
+        <tbody id="formatsBody"></tbody>
+    </table>
+
+    <table id="audioTable" style="display:none;">
+        <thead>
+            <tr>
+                <th>Format Code</th>
+                <th>Extension</th>
+                <th>Resolution</th>
+                <th>Size</th>
+                <th>Bitrate</th>
+            </tr>
+        </thead>
+        <tbody id="audioBody"></tbody>
+    </table>
+
+    <div class="overlay" id="overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="/js/downloadYoutube.js">
+
+    </script>
+</body>
+</html>

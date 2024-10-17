@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Downloaded Videos</title>
+    <link rel="stylesheet" href="style/profile.css">
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Navigation</h2>
+        <a href="#" onclick="showSection('personalData')">Personal Data</a>
+        <a href="#" onclick="showSection('authData')">Authentication Data</a>
+        <a href="#" onclick="showSection('settings')">Settings</a>
+        <a href="#" onclick="showSection('downloadedVideos')">Downloaded Videos</a>
+        <a href="#" onclick="showSection('sessions')">Sessions</a>
+    </div>
+    
+    <div class="main-content">
+        <div id="personalData" class="container">
+            <h1>Personal Data</h1>
+            <p>Username: <strong>user123</strong></p>
+            <p>Email: <strong>user@example.com</strong></p>
+        </div>
+
+        <div id="authData" class="container">
+            <h1>Authentication Data</h1>
+            <p>Manage your authentication settings here.</p>
+        </div>
+
+        <div id="settings" class="container">
+            <h1>Settings</h1>
+            <p>Adjust your settings here.</p>
+        </div>
+
+        <div id="downloadedVideos" class="container">
+            <h1>User Profile</h1>
+            <h2>Downloaded Videos</h2>
+            <ul class="video-list" id="video-list">
+
+                <!-- <li class="video-item">
+                    <span><a href="blob:http://127.0.0.1:3000/00915f08-1119-45c1-8b78-4f3c7138401e" target="_blank" style="color: #007bff;">test</a></span>
+                    <div>
+                        <button onclick="editVideo(0)">Edit</button>
+                        <button class="delete-button" onclick="deleteVideo(0)">Delete</button>
+                    </div>
+                </li> -->
+                
+            </ul>
+            <div class="button-container">
+                <button onclick="addvidbut()">Add Video</button>
+            </div>
+
+                <!-- <div id="videoModal" class="modal-video">
+                    <div class="modal-video-content">
+                        <span class="close">&times;</span>
+                        <video id="video" controls>
+                            <source id="videoSource" src="your-video.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div> -->
+
+        </div>
+
+        <!-- Start Session -->
+
+
+        <div id="sessions" class="container">
+            <h1>Sessions</h1>
+            <div id="session-boxes" class="session-boxes"></div> <!-- Container for session boxes -->
+            <button id="addSessionBtn">Add Session</button>
+        </div>
+
+        
+        <div id="modal" class="modal" style="display:none;">
+            <div class="modal-content" id="video-modal">
+                <span id="modal-title"></span>
+                <h3>Videos:</h3>
+
+                <div id="select-vid-session">
+                    <label for="">Add Video</label>
+                    <!-- <select name="video" id="add-video-session" session-id=""> -->
+                </div>
+
+                    
+                </select>
+                <button id="but-add-video-session">Add Video Selected</button>
+                <button id="but-remove-video-session">Remove Video Selected</button>
+
+                <ul id="video-session-list"></ul>
+                <button class="button" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+
+        <div id="addSessionModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeSessionModal()">&times;</span>
+                <h2>Add New Session</h2>
+                <input type="text" id="newSessionTitle" placeholder="Enter session title">
+                <button id="createSessionBtn">Create</button>
+            </div>
+        </div>
+        
+        
+
+        <!-- End Session -->
+
+    </div>
+
+    <!-- Modal for Adding Video -->
+    <form id="formAddVideo" action="/upload/video" method="POST" enctype="multipart/form-data">
+        <div id="formModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeFormModal()">&times;</span>
+                <h2>Add Video</h2>
+                <input type="text" id="videoTitle" name="title" placeholder="Video Title" required>
+                <input type="file" name="video" accept="video/*" id="videoFile">
+                <button>Upload Video</button>
+                <div class="upload-message"></div>
+            </div>
+        </div>
+    </form>
+
+    <script src="/js//profile.js"></script>
+</body>
+</html>

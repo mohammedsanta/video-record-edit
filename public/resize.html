@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Cropper</title>
+    <link rel="stylesheet" href="style/resize.css">
+
+</head>
+<body>
+    <h1>Video Cropper</h1>
+    <div id="videoContainer">
+        <video id="videoPlayer" controls>
+            <source src="http://127.0.0.1:3000/video?path=D:\Coding\JS\nodejs\videoedit\uploads/uploadedoutput.mp4">
+        </video>
+        <div id="cropArea" style="width: 960px; height: 540px;">
+            <div class="resize-handle se"></div>
+            <div class="resize-handle sw"></div>
+            <div class="resize-handle ne"></div>
+            <div class="resize-handle nw"></div>
+            <div class="resize-handle n"></div>
+            <div class="resize-handle s"></div>
+            <div class="resize-handle e"></div>
+            <div class="resize-handle w"></div>
+        </div>
+    </div>
+
+    <form id="videoForm" action="http://127.0.0.1:3000/cut/resize" method="POST">
+        <input type="number" id="width" name="width" placeholder="Width"  />
+        <input type="number" id="height" name="height" placeholder="Height"  />
+        <input type="number" id="x" name="x" placeholder="X Coordinate"  />
+        <input type="number" id="y" name="y" placeholder="Y Coordinate"  />
+        <button type="submit">Resize</button>
+    </form>
+
+    <div class="but-select">
+        <button id="cropButton">Show Crop</button>
+        <button id="resetCropButton">Reset Crop Area</button>
+    </div>
+
+    <div id="loading" style="display: none; color: #BB86FC; font-size: 20px; margin-top: 20px;">
+        Loading, please wait...
+    </div>
+
+
+    <script src="/js/resize.js">
+
+    </script>
+</body>
+</html>

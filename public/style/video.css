@@ -1,0 +1,322 @@
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f1e6; /* Light beige background for a softer look */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.main {
+    width: 100%;
+    max-height: 100vh;
+    /* padding: 2rem; */
+    display: flex; /* Arrange video and controls side by side */
+    background: #fff; /* Clean white background for the main container */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in;
+    flex-direction: column;
+}
+
+.top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vid {
+    display: flex;
+    width: 65%;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+video {
+    width: 65%;
+    margin-top: 1rem;
+}
+
+#forward {
+    width: 50px;
+    height: 50px;
+    background-color: snow;
+    border: none;
+}
+#forward img {
+    width: 100%;
+    height: 100%;
+}
+
+#backward {
+    width: 50px;
+    height: 50px;
+    background-color: snow;
+    border: none;
+}
+#backward img {
+    width: 100%;
+    height: 100%;
+}
+
+.keys {
+    display: flex;
+    gap: 5rem;
+}
+
+
+.controls {
+    flex: 1; /* Controls container takes less space */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 1rem;
+}
+
+.controls label {
+    font-weight: 600;
+    color: #5c4b51; /* Muted brownish color */
+}
+
+.controls select, 
+.controls button {
+    padding: 0.75rem;
+    border: 1px solid #b8a7a3; /* Soft beige border */
+    border-radius: 8px;
+    background: #e3d8d1; /* Light, warm grey background */
+    color: #5c4b51; /* Muted brown text */
+    font-size: 1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.controls select {
+    background: #e3d8d1; /* Light grey background */
+    color: #5c4b51; /* Muted brown text */
+    position: relative;
+    padding-right: 2rem; /* Space for the arrow */
+}
+
+.controls select::after {
+    content: '▼'; /* Arrow symbol */
+    font-size: 0.8rem;
+    color: #5c4b51; /* Arrow color matching text */
+    position: absolute;
+    right: 0.75rem; /* Position the arrow */
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Ensure the arrow doesn’t interfere with interactions */
+}
+
+.controls select:focus {
+    border-color: #8c6f6f; /* Darker brown for focus */
+    background: #d9cfc9; /* Slightly darker background on focus */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on focus */
+}
+
+.controls button {
+    background-color: #7d5a50; /* Earthy brown color */
+    color: #fff;
+}
+
+.controls button:hover {
+    background-color: #5b3e34; /* Darker brown on hover */
+    transform: scale(1.05);
+}
+
+.controls button:active {
+    transform: scale(0.95);
+}
+
+.button-container {
+    display: flex;
+    gap: 1rem;
+}
+
+.container {
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    background: #fff; /* White background for the container */
+}
+
+h1 {
+    color: #3e3b3a; /* Darker shade for the text */
+    margin-bottom: 1rem;
+    font-size: 24px;
+}
+
+.form-group {
+    max-width: 2000px;
+    max-height: 300px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    overflow: auto;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #5c4b51; /* Muted brownish color */
+}
+
+.form-group select, 
+.form-group input[type="text"], 
+.form-group input[type="file"] {
+    /* padding: 0.75rem; */
+    border: 1px solid #b8a7a3; /* Soft beige border */
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 1rem;
+    background-color: #f8f5f2; /* Light beige background for form elements */
+    transition: border-color 0.3s ease;
+}
+
+.form-group select:focus, 
+.form-group input[type="text"]:focus, 
+.form-group input[type="file"]:focus {
+    border-color: #8c6f6f; /* Darker brown for focus state */
+    outline: none;
+}
+
+.button-container button {
+    background-color: #7d5a50; /* Earthy brown color */
+    border: none;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.button-container button:hover {
+    background-color: #5b3e34; /* Darker brown on hover */
+    transform: scale(1.05);
+}
+
+.button-container button:active {
+    transform: scale(0.95);
+}
+
+.button-container button#butCrop {
+    background-color: #9e7c5c; /* Lighter brown for crop button */
+}
+
+.button-container button#butCrop:hover {
+    background-color: #7a5c40; /* Darker brown on hover */
+}
+
+.button-container button#butCrop:active {
+    background-color: #5a3e2a; /* Darker brown on active */
+}
+
+.containerOfTrim {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background: #eae5e0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.containerOfTrim:hover {
+    background-color: #d9d3d1; /* Slightly darker grey on hover */
+}
+
+.setTrims {
+
+}
+
+.time-display {
+    font-size: 1rem;
+    color: #3e3b3a; /* Darker grey for text */
+    text-align: center;
+    margin-right: 5px;
+}
+
+.croping {
+    background-color: #0D1117;
+    position: fixed;
+    width: 95%;
+    height: 95%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.exporting-section {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 95%;
+    height: 95%;
+    display: none; /* Initially hidden */
+}
+.exporting-section label {
+    display: block;
+    margin: 10px 0 5px;
+}
+.exporting-section select, .exporting-section button {
+    margin-bottom: 10px;
+}
+
+.exporting-section label {
+    display: block;
+    margin: 10px 0 5px;
+}
+.exporting-section select, .exporting-section button {
+    margin-bottom: 10px;
+}
+.exporting-exit {
+    text-align: end;
+    font-size: 2rem;
+    color: red;
+}
+.info {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #333;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+.info-title {
+    font-weight: bold;
+    color: #007BFF;
+}
+.codec-docs {
+    margin-top: 20px;
+    font-size: 14px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 5px;
+}

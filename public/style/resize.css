@@ -1,0 +1,125 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background: #161B22;        /* Darker header */
+    color: #79C0FF;             /* Soft teal */
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+main {
+    max-width: 1000px;
+    width: 100%;
+}
+
+#videoContainer {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    max-width: 970px;
+    height: 550px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #000;
+}
+
+/* #videoPlayer {
+    width: 100%;
+    height: 100%;
+} */
+
+#cropArea {
+    position: absolute;
+    border: 2px dashed rgba(121, 192, 255, 0.8);
+    pointer-events: none; 
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(121, 192, 255, 0.1);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+#cropArea:hover {
+    border-color: #79C0FF;     /* Change border color on hover */
+}
+
+.input-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input[type="number"] {
+    padding: 10px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    background-color: #161B22; /* Dark input background */
+    color: #C9D1D9;             /* Light input text */
+    flex: 1;
+    min-width: 150px;
+    transition: border-color 0.3s;
+}
+
+input[type="number"]:focus {
+    border-color: #79C0FF;      /* Teal focus border */
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #79C0FF;   /* Teal button */
+    color: #000;                 /* Dark text */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+button:hover {
+    background-color: #4D8CFF;   /* Darker teal on hover */
+    transform: scale(1.05);
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.but-select { 
+    margin-top: 1rem;
+}
+
+.resize-handle {
+    width: 12px;
+    height: 12px;
+    background: rgba(121, 192, 255, 0.8);
+    position: absolute;
+    cursor: nwse-resize; 
+    pointer-events: auto; 
+    border-radius: 50%;
+    transition: background 0.2s;
+}
+
+.resize-handle:hover {
+    background: rgba(121, 192, 255, 1); /* Lighter on hover */
+}
+
+.resize-handle.se { bottom: -6px; right: -6px; }
+.resize-handle.sw { bottom: -6px; left: -6px; }
+.resize-handle.ne { top: -6px; right: -6px; }
+.resize-handle.nw { top: -6px; left: -6px; }
+.resize-handle.n { top: -6px; left: 50%; transform: translateX(-50%); }
+.resize-handle.s { bottom: -6px; left: 50%; transform: translateX(-50%); }
+.resize-handle.e { right: -6px; top: 50%; transform: translateY(-50%); }
+.resize-handle.w { left: -6px; top: 50%; transform: translateY(-50%); }

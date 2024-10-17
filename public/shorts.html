@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Shorts Video Editor</title>
+    <link rel="stylesheet" href="style/shorts.css">
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Shorts Video Editor</h1>
+        <form id="uploadForm" method="POST" enctype="multipart/form-data">
+            <div class="drop-zone" id="dropZone">
+                <p>Drag & Drop your video file here or click to select</p>
+                <input type="file" id="videoInput" name="video" accept="video/*" style="display: none;">
+            </div>
+            
+            <div class="radio-group">
+                <label><input type="radio" name="editOption" value="rotating"> Rotating</label>
+                <label><input type="radio" name="editOption" value="padding"> Padding</label>
+                <label><input type="radio" name="editOption" value="scaling"> Scaling</label>
+                <label><input type="radio" name="editOption" value="croping"> Cropping</label>
+            </div>
+
+            <p id="error" class="error">Please Select Type of Reformate Dimensions</p>
+            
+            <div class="button-container">
+                <button id="processButton" type="submit">
+                    <span class="button-text">Process Video</span>
+                    <div id="loadingSpinner" class="loading-spinner"></div>
+                </button>
+            </div>
+        </form>
+        <video id="preview" controls></video>
+        
+        <script src="/js/shorts.js">
+        </script>
+    </div>
+</body>
+</html>
