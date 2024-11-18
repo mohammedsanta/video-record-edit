@@ -24,7 +24,7 @@ document.getElementById('urlForm').onsubmit = async (e) => {
     document.getElementById('audioTable').style.display = 'none';
 
     try {
-        const response = await fetch('/formats', {
+        const response = await fetch('/youtube/formats', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
@@ -36,6 +36,7 @@ document.getElementById('urlForm').onsubmit = async (e) => {
             const errorData = await response.json();
             throw new Error(errorData.error || 'Failed to fetch formats');
         }
+        console.log(response)
 
         const { audioFormats, videoFormats, data } = await response.json();
 
@@ -115,7 +116,6 @@ document.getElementById('downloadButton').onclick = async () => {
     const videoFormat = document.getElementById('videoSelect').value;
     const audioFormat = document.getElementById('audioSelect').value;
     const url = document.getElementById('url').value.trim();
-    console.log(videoFormat,audioFormat,url)
 
 
 
@@ -125,7 +125,7 @@ document.getElementById('downloadButton').onclick = async () => {
     }
 
     try {
-        const response = await fetch('http://127.0.0.1:3000/download', {
+        const response = await fetch(`/youtube/video`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -154,3 +154,46 @@ document.getElementById('downloadButton').onclick = async () => {
         alert(`Error: ${error.message}`);
     }
 };
+
+document.getElementById('saveButton').onclick = async () => {
+
+    const videoFormat = document.getElementById('videoSelect').value;
+    const audioFormat = document.getElementById('audioSelect').value;
+    const url = document.getElementById('url').value.trim();
+
+    if (!videoFormat || !audioFormat || !url) {
+        alert('Please select both a video and an audio format and enter a URL.');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/youtube/video/save`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ videoFormat, audioFormat, url })
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const contentDisposition = response.headers.get('Content-Disposition');
+        const fileName = contentDisposition ? 
+            contentDisposition.split('filename=')[1].replace(/"/g, '') : 
+            'converted-file';
+
+        const blob = await response.blob();
+        const urlD = URL.createObjectURL(blob);
+
+        const downloadLink = document.createElement('a');
+        downloadLink.href = urlD;
+        downloadLink.download = `${Date.now()}-${fileName}`;
+        downloadLink.click();
+
+    } catch (error) {
+        alert(`Error: ${error.message}`);
+    }
+
+}

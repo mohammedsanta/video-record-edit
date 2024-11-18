@@ -9,13 +9,14 @@ exports.saveDataVideo = asyncHandler(async (req,res,next) => {
     // after upload video save path of data of video to database
     
     const { title } = req.body;
+
+    if(!req.body.videoCheck) {
+        return res.status(400).json({ message: 'Video not Selected Yet' });
+    }
     
     const data = verifyToken(req.cookies.token)
 
     validTitle = await Video.find({ title });
-
-    console.log(req.body)
-
     
     if(validTitle.length) {
         return res.json({ message: 'This Title Already exists' });
@@ -27,6 +28,6 @@ exports.saveDataVideo = asyncHandler(async (req,res,next) => {
         path: `${title}-${data.id}.mp4`,
     });
     
-    res.redirect('http://127.0.0.1:3000/profile')
+    res.redirect('/')
 
-})
+});

@@ -10,6 +10,9 @@ const { authMiddleware } = require('../middleware/auth');
 //     res.redirect(`/editing?video=${req.file.filename}`)
 // })
 
+
+
+
 route.post('/video',authMiddleware,upload.single('video'),saveDataVideo)
 
 

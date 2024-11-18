@@ -7,7 +7,8 @@ const { verifyToken } = require('../utils/createToken');
 
 exports.getVideos = asyncHandler(async (req,res,next) => {
 
-    const videos = await Video.find();
+    const data = verifyToken(req.cookies.token);
+    const videos = await Video.find({ username: data.id });
 
     res.json({ videos });
 
@@ -25,30 +26,61 @@ exports.displayVideo = asyncHandler(async (req, res) => {
 
     const videoId = req.params.id;
     const user = verifyToken(req.cookies.token);
-
     const video = await Video.findById(videoId);
 
     // Assume video files are stored in a directory called 'videos'
     const videoPath = path.join(__dirname,'/../uploads',`${user.username}/${video.path}`); // Change the extension if necessary
 
-    // Check if the file exists
-    // if not delete video from database
-    fs.stat(videoPath, async (err, stats) => {
-        if (err || !stats.isFile()) {
-            await Video.findByIdAndDelete(videoId);
-            return res.status(404).send('Video not found');
+    const stat = fs.statSync(videoPath);
+    const fileSize = stat.size;
+    const range = req.headers.range;
+
+
+
+    if (range) {
+        const parts = range.replace(/bytes=/, '').split('-');
+        const start = parseInt(parts[0], 10);
+        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+        if (start >= fileSize || end >= fileSize) {
+            res.status(416).send('Requested Range Not Satisfiable');
+            return;
         }
 
-        // Set headers for video streaming
-        res.writeHead(200, {
+        const chunksize = (end - start) + 1;
+        const file = fs.createReadStream(videoPath, { start, end });
+        res.writeHead(206, {
             'Content-Type': 'video/mp4',
-            'Content-Length': stats.size,
+            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+            'Content-Length': chunksize,
         });
+        file.pipe(res);
+    } else {
+        res.writeHead(200, {
+            'Content-Length': fileSize,
+            'Content-Type': 'video/mp4',
+        });
+        fs.createReadStream(videoPath).pipe(res);
+    }
 
-        // Create a read stream and pipe it to the response
-        const readStream = fs.createReadStream(videoPath);
-        readStream.pipe(res);
-    });
+    // Check if the file exists
+    // if not delete video from database
+    // fs.stat(videoPath, async (err, stats) => {
+    //     if (err || !stats.isFile()) {
+    //         await Video.findByIdAndDelete(videoId);
+    //         return res.status(404).send('Video not found');
+    //     }
+
+    //     // Set headers for video streaming
+    //     res.writeHead(200, {
+    //         'Content-Type': 'video/mp4',
+    //         'Content-Length': stats.size,
+    //     });
+
+    //     // Create a read stream and pipe it to the response
+    //     const readStream = fs.createReadStream(videoPath);
+    //     readStream.pipe(res);
+    // });
 });
 
 exports.deleteVideo = asyncHandler(async (req,res,next) => {

@@ -50,6 +50,7 @@ video {
 
 #stopBtn {
   display: none;
+  margin: 1rem;
 }
 
 .border video {

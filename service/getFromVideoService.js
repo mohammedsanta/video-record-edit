@@ -3,20 +3,24 @@ const asyncHandler = require('express-async-handler');
 const fs = require('fs');
 const path = require('path');
 const child = require('child_process');
+const { getData } = require('./getData');
 
 /**
  * Endpoint to extract and serve a video thumbnail.
  */
 exports.thumbnail = asyncHandler(async (req, res, next) => {
-    const inputPath = path.join(__dirname, '/../uploads', req.query.video);
+
+    const { video, videoPath, user } = await getData(req.query.video,req.cookies.token);
+
+    const inputPath = path.join(__dirname, `/../uploads/${videoPath}`);
     const outputPath = path.join(__dirname, '/../screenshot', 'thumbnail.png');
 
-    console.log('Input Path:', inputPath);
+    console.log('Input Path:', videoPath);
     console.log('Output Path:', outputPath);
 
     try {
         // Extract thumbnail
-        await extractThumbnail(inputPath, outputPath,req.query.time);
+        await extractThumbnail(videoPath, outputPath,req.query.time);
 
         // Check if the thumbnail file exists and serve it
         if (fs.existsSync(outputPath)) {

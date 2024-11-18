@@ -2,6 +2,8 @@ const ffmpeg = require('fluent-ffmpeg');
 const asyncHandler = require('express-async-handler');
 const fs = require('fs');
 const path = require('path');
+const Video = require('../model/video');
+const { verifyToken } = require('../utils/createToken');
 
 
 const mainCode = async (inputFilePath, outputFilePath, filter) => {
@@ -74,6 +76,7 @@ exports.formating = asyncHandler(async (req, res) => {
     
     const type = req.body.editOption;
     const { path: tempPath, originalname } = req.file;
+
     const videoPath = path.join(__dirname, '/../', tempPath);
     const outputPath = path.join(__dirname, '/../', './outputs/', originalname);
 
@@ -105,6 +108,74 @@ exports.formating = asyncHandler(async (req, res) => {
                     // Optionally delete files after sending them
                     fs.unlinkSync(videoPath);  // Remove the uploaded file
                     fs.unlinkSync(outputPath); // Remove the processed file
+                }
+            });
+        } else {
+            return res.status(404).send('Processed file not found.');
+        }
+    } catch (error) {
+        return res.status(500).send(`Error processing video: ${error.message}`);
+    }
+});
+
+exports.formatingFromLibrary = asyncHandler(async (req, res) => {
+    
+    const type = req.body.editOption;
+
+    const { video } = req.body;
+
+    const getVideo = await Video.findById(video)
+    const user = verifyToken(req.cookies.token)
+    
+    const videoPath = path.join(__dirname, `/../uploads/${user.username}/${getVideo.path}`);
+    const shortsPath = path.join(__dirname, `/../uploads/${user.username}/youtubeshorts`);
+    const outputPath = `${shortsPath}/${getVideo.title}(shorts).mp4`;
+
+
+    // if youtube shorts file not exists
+
+    if(!fs.existsSync(shortsPath)) {
+        fs.mkdir(`${shortsPath}`,(err) => {
+            console.log(err)
+        })
+    }
+
+    // save to db
+
+    const saveVideo = await Video.create({
+        username: user.id,
+        title: `${getVideo.title}(shorts)`,
+        path: `/youtubeshorts/${getVideo.title}(shorts).mp4`,
+    });
+
+    // 
+
+    try {
+        switch (type) {
+            case 'croping':
+                await croping(videoPath, outputPath);
+                break;
+            case 'rotating':
+                await rotating(videoPath, outputPath);
+                break;
+            case 'scaling':
+                await scaling(videoPath, outputPath);
+                break;
+            case 'padding':
+                await padding(videoPath, outputPath);
+                break;
+            default:
+                return res.status(400).send('Invalid edit option.');
+        }
+
+        // Check if the output file exists and send it to the user
+        if (fs.existsSync(outputPath)) {
+            return res.download(outputPath, (err) => {
+                if (err) {
+                    console.error(`Error sending file: ${err.message}`);
+                    return res.status(500).send(`Error sending file: ${err.message}`);
+                } else {
+                    // Optionally delete files after sending them
                 }
             });
         } else {

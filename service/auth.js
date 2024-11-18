@@ -20,10 +20,12 @@ exports.login = asyncHandler(async (req,res,next) => {
 
     res.cookie('token', token, {
         httpOnly: true, // Prevents JavaScript access to the cookie
-        secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+        // secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
         maxAge: 3600000, // 1 hour expiration
-        sameSite: 'Strict' // Prevents CSRF attacks
+        // sameSite: 'Strict' // Prevents CSRF attacks
     });
+
+    return res.redirect('/')
 
     res.status(200).json({
         user,
@@ -48,3 +50,10 @@ exports.signup = asyncHandler(async (req,res,next) => {
     res.json(createUser);
 
 });
+
+exports.logout = asyncHandler(async (req,res,next) => {
+
+    res.cookie('token', '', { expires: new Date(0) });
+    res.redirect('/'); // Redirect back to the main page
+
+})

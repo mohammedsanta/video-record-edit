@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Downloaded Videos</title>
+    <link rel="stylesheet" href="/style/profile.css">
+    <style>
+
+.modalsettings {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-settings-content {
+    background-color: #1e1e1e; /* Dark gray for the modal */
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.close {
+    cursor: pointer;
+    font-size: 20px;
+    float: right;
+    color: #aaa; /* Light gray for close button */
+}
+
+.close:hover {
+    color: #fff; /* Brighten on hover */
+}
+
+#user-data {
+    margin-bottom: 20px;
+}
+
+button.but-setting {
+    background-color: #3a3a3a; /* Darker button background */
+    color: #ffffff; /* White text */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+}
+
+button.but-setting:hover {
+    background-color: #555; /* Lighter on hover */
+    transform: translateY(-2px);
+}
+
+form label {
+    margin-top: 10px;
+    display: block;
+    font-weight: bold;
+    color: #ffffff; /* White label text */
+}
+
+form input {
+    width: 94%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #444; /* Dark border */
+    border-radius: 5px;
+    background-color: #333; /* Dark input background */
+    color: #ffffff; /* White text in input */
+}
+
+form input:focus {
+    border-color: #007BFF; /* Highlight border on focus */
+    outline: none;
+}
+
+.hidden {
+    display: none;
+} 
+
+
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <h2>Navigation</h2>
+        <a href="/record">Record</a>
+        <a href="/youtube/video">youtube donwloader</a>
+        <a href="/convert">convert</a>
+        <a href="/shorts">short</a>
+        <a href="#" onclick="showSection('downloadedVideos')">Downloaded Videos</a>
+        <a href="#" onclick="showSection('sessions')">Sessions</a>
+        <button class="but-setting" id="openModal">Open Settings</button>
+
+        <form id="logoutForm" action="/auth/logout" method="POST" style="margin: 1rem 0;">
+            <button type="submit">Logout</button>
+        </form>    
+    </div>
+    
+    <div class="main-content">
+
+        <div id="authData" class="container">
+            <h1>Authentication Data</h1>
+            <p>Manage your authentication settings here.</p>
+        </div>
+
+        <div id="modalsettings" class="modalsettings" style="display: none;"> 
+            <div class="modal-settings-content"> 
+                <span class="close but-setting" id="closeModal">×</span>
+                <div id="user-data">
+                    <p id="display-username">Username: <span id="username-text">JohnDoe</span></p>
+                    <p id="display-email">Email: <span id="email-text">johndoe@example.com</span></p>
+                    <button class="but-setting" id="editButton">Edit</button>
+                </div>
+                
+                <form id="settings-form" class="hidden">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                
+                    <button class="but-setting" type="submit">Save Settings</button>
+                    <button class="but-setting" type="button" id="cancel-button">Cancel</button>
+                </form>
+                <br>
+            </div>
+        </div>
+        
+        
+        
+
+        
+        
+        <div id="downloadedVideos" class="container">
+            <h1>User Profile</h1>
+            <h2>Downloaded Videos</h2>
+            <ul class="video-list" id="video-list">
+
+                <!-- <li class="video-item">
+                    <span><a href="blob:http://127.0.0.1:3000/00915f08-1119-45c1-8b78-4f3c7138401e" target="_blank" style="color: #007bff;">test</a></span>
+                    <div>
+                        <button onclick="editVideo(0)">Edit</button>
+                        <button class="delete-button" onclick="deleteVideo(0)">Delete</button>
+                    </div>
+                </li> -->
+                
+            </ul>
+            <div class="button-container">
+                <button onclick="addvidbut()">Add Video</button>
+            </div>
+
+                <!-- <div id="videoModal" class="modal-video">
+                    <div class="modal-video-content">
+                        <span class="close">&times;</span>
+                        <video id="video" controls>
+                            <source id="videoSource" src="your-video.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                </div> -->
+
+        </div>
+
+        <!-- Start Session -->
+
+
+        <div id="sessions" class="container">
+            <h1>Sessions</h1>
+            <div id="session-boxes" class="session-boxes"></div> <!-- Container for session boxes -->
+            <button id="addSessionBtn">Add Session</button>
+        </div>
+
+        
+        <div id="modal" class="modal" style="display:none;">
+            <div class="modal-content" id="video-modal">
+                <span id="modal-title"></span>
+                <h3>Videos:</h3>
+
+                <div id="select-vid-session">
+                    <label for="">Add Video</label>
+                    <!-- <select name="video" id="add-video-session" session-id=""> -->
+                </div>
+
+                    
+                </select>
+                <button id="but-add-video-session">Add Video Selected</button>
+                <button id="but-remove-video-session">Remove Video Selected</button>
+
+                <ul id="video-session-list"></ul>
+                <button class="button" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+
+        <div id="addSessionModal" class="modal" style="display:none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeSessionModal()">&times;</span>
+                <h2>Add New Session</h2>
+                <input type="text" id="newSessionTitle" placeholder="Enter session title">
+                <button id="createSessionBtn">Create</button>
+            </div>
+        </div>
+        
+        
+
+        <!-- End Session -->
+
+    </div>
+
+    <!-- Modal for Adding Video -->
+    <form id="formAddVideo" action="/upload/video" method="POST" enctype="multipart/form-data">
+        <div id="formModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeFormModal()">&times;</span>
+                <h2>Add Video</h2>
+                <input type="text" id="videoTitle" name="title" placeholder="Video Title" required>
+                <input type="file" name="video" accept="video/*" id="videoFile">
+                <button>Upload Video</button>
+                <div class="upload-message"></div>
+            </div>
+        </div>
+    </form>
+
+    <script src="/js//profile.js">
+
+
+
+    </script>
+</body>
+</html>

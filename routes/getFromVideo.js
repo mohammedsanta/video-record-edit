@@ -3,7 +3,7 @@ const { thumbnail, gif } = require('../service/getFromVideoService');
 const route = express.Router()
 
 // screenshot
-route.get('/screenshot',thumbnail);
+route.get('/get/screenshot',thumbnail);
 
 // gif
 route.get('/gif',gif);

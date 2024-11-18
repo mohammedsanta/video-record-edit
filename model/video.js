@@ -5,8 +5,14 @@ const videoSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User',
     },
-    title: String,
-    path: String,
+    title: {
+        type: String,
+        required: [true, 'title required']
+    },
+    path: {
+        type: String,
+        required: [true, 'path required']
+    },
 });
 
 const Video = mongoose.model('Video', videoSchema);

@@ -8,8 +8,6 @@ exports.createSession = asyncHandler(async (req,res,next) => {
     const { title } = req.body;
     const username = verifyToken(req.cookies.token);
 
-    console.log(req.body)
-
     // Create a new session
     const newSession = new Session({
         username: username.id,
@@ -29,7 +27,8 @@ exports.createSession = asyncHandler(async (req,res,next) => {
 
 exports.sessions = asyncHandler(async (req,res,next) => {
 
-    const sessions = await Session.find();
+    const data = verifyToken(req.cookies.token);
+    const sessions = await Session.find({ username: data.id });
     res.json({ sessions });
 
 })

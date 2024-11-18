@@ -124,6 +124,7 @@ button:hover {
     border-radius: 8px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
     max-width: 90%;
+    max-height: 75%;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -168,6 +169,10 @@ video {
 .vide-button:focus {
     outline: none; /* Remove outline when focused */
 }
+
+/* play video */
+
+
 
 /* End Video */
 

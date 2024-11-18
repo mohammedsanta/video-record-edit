@@ -3,20 +3,27 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link rel="stylesheet" href="/video.css"> -->
     <link href="/style/video.css" rel="stylesheet">
-    <link href="/style/resize.css" rel="stylesheet">
     <title>Video Editing Tool</title>
 </head>
 <body>
 
-    <div class="main">
+    <div id="noVideoModal" class="modal no-video-modal">
+        <div class="modal-content">
+            <h2>No Video Available</h2>
+            <p>There is no video available to play at this moment.</p>
+            <button>Add Video</button>
+        </div>
+    </div>
 
+    <div class="main">
+        
+        <select class="mySelect" id="mySelect"></select>
         <div class="top">
 
             <div class="vid">
                 <video id="videoPlayer" controls autoplay>
-                    <source id="videoSrc" src="http://127.0.0.1:3000/video?path=D:\Coding\JS\nodejs\videoedit\uploads/uploadedoutput.mp4" type="video/mp4" />
+                    <source id="videoSrc" src="" type="video/mp4" />
                 </video>
     
                 <div class="keys">
@@ -44,7 +51,7 @@
     
             <div class="controls">
                 <button onclick="screenshot()">Screenshot</button>
-                <form id="gifForm" action="">
+                <form id="gifForm" action="" style="display: flex;">
                     <label for="">Duration of gif (seconds)</label>
                     <input type="text" name="duration">
                     <input id="videoForgif" type="text" name="video" hidden>
@@ -55,7 +62,6 @@
                 </form>
                 <div class="button-container">
                     <button onclick="toggleExportSection()">Show Exporting Section</button>
-                    <button type="button" id="butCrop" onclick="toggleCrop()">Crop Video</button>
                 </div>
 
                 <div class="exporting-section" id="exportingSection">
@@ -101,7 +107,6 @@
                     
                 </div>
 
-
             </div>
 
         </div>
@@ -119,6 +124,7 @@
 
             <form id="uploadForm" action="/cut/trim" method="POST">
                 <div id="trims" class="form-group"></div>
+                <input type="hidden" id="uploadFormVideo" name="video">
                 <div class="button-container">
                     <button type="button" id="add" onclick="addTrim()">Add Trim</button>
                     <button type="submit" id="upload">Edit Video</button>
@@ -131,44 +137,7 @@
         </div>
     </div>
 
-    <!-- croping -->
 
-    <div class="croping" id="croping">
-
-        <h1>Video Cropper</h1>
-        <div id="videoContainer">
-            <video id="videoPlayer" controls>
-                <source src="http://127.0.0.1:3000/video?path=D:\Coding\JS\nodejs\videoedit\uploads/uploadedoutput.mp4">
-            </video>
-            <div id="cropArea" style="width: 960px; height: 540px;">
-                <div class="resize-handle se"></div>
-                <div class="resize-handle sw"></div>
-                <div class="resize-handle ne"></div>
-                <div class="resize-handle nw"></div>
-                <div class="resize-handle n"></div>
-                <div class="resize-handle s"></div>
-                <div class="resize-handle e"></div>
-                <div class="resize-handle w"></div>
-            </div>
-        </div>
-    
-        <form id="videoForm" method="POST">
-            <input type="number" id="width" name="width" placeholder="Width"  />
-            <input type="number" id="height" name="height" placeholder="Height"  />
-            <input type="number" id="x" name="x" placeholder="X Coordinate"  />
-            <input type="number" id="y" name="y" placeholder="Y Coordinate"  />
-            <button type="submit">Set Resize</button>
-        </form>
-    
-        <div class="but-select">
-            <button id="cropButton">Show Crop</button>
-            <button id="resetCropButton">Reset Crop Area</button>
-        </div>
-    
-        
-    </div>
-    
-    <!-- end croping -->
     
     <!-- video -->
     <script src="/js/video.js">

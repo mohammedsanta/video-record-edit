@@ -3,48 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Cropper</title>
-    <link rel="stylesheet" href="style/resize.css">
-
+    <title>Advanced Video Cropper</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        .video-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        #video {
+            max-width: 100%;
+        }
+        #crop-area {
+            position: absolute;
+            border: 2px dashed red;
+            pointer-events: none;
+        }
+        #dimensions {
+            margin: 10px 0;
+        }
+        #controls, #dimension-inputs {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        button {
+            padding: 10px;
+        }
+        input {
+            padding: 5px;
+            width: 60px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Video Cropper</h1>
-    <div id="videoContainer">
-        <video id="videoPlayer" controls>
-            <source src="http://127.0.0.1:3000/video?path=D:\Coding\JS\nodejs\videoedit\uploads/uploadedoutput.mp4">
+    <div class="video-container">
+        <video id="video" width="600" controls>
+            <source src="your-video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
         </video>
-        <div id="cropArea" style="width: 960px; height: 540px;">
-            <div class="resize-handle se"></div>
-            <div class="resize-handle sw"></div>
-            <div class="resize-handle ne"></div>
-            <div class="resize-handle nw"></div>
-            <div class="resize-handle n"></div>
-            <div class="resize-handle s"></div>
-            <div class="resize-handle e"></div>
-            <div class="resize-handle w"></div>
-        </div>
+        <div id="crop-area"></div>
     </div>
-
-    <form id="videoForm" action="http://127.0.0.1:3000/cut/resize" method="POST">
-        <input type="number" id="width" name="width" placeholder="Width"  />
-        <input type="number" id="height" name="height" placeholder="Height"  />
-        <input type="number" id="x" name="x" placeholder="X Coordinate"  />
-        <input type="number" id="y" name="y" placeholder="Y Coordinate"  />
-        <button type="submit">Resize</button>
-    </form>
-
-    <div class="but-select">
-        <button id="cropButton">Show Crop</button>
-        <button id="resetCropButton">Reset Crop Area</button>
+    <div id="dimensions">Width: 300px, Height: 200px</div>
+    <div id="dimension-inputs">
+        <input type="number" id="inputWidth" placeholder="Width" value="300">
+        <input type="number" id="inputHeight" placeholder="Height" value="200">
+        <input type="number" id="inputCropX" placeholder="Crop X" value="100">
+        <input type="number" id="inputCropY" placeholder="Crop Y" value="50">
     </div>
-
-    <div id="loading" style="display: none; color: #BB86FC; font-size: 20px; margin-top: 20px;">
-        Loading, please wait...
+    <div id="controls">
+        <button id="setDimensions">Set Dimensions</button>
+        <button id="reset">Reset Crop Area</button>
+        <button id="crop">Show Crop Preview</button>
     </div>
+    <canvas id="previewCanvas" style="display:none;"></canvas>
+    <script>
+        const cropArea = document.getElementById('crop-area');
+        const video = document.getElementById('video');
+        const dimensionsDisplay = document.getElementById('dimensions');
+        const resetButton = document.getElementById('reset');
+        const cropButton = document.getElementById('crop');
+        const canvas = document.getElementById('previewCanvas');
+        const ctx = canvas.getContext('2d');
 
+        let cropWidth = 300;
+        let cropHeight = 200;
+        let cropX = 100;
+        let cropY = 50;
+        let aspectRatio = cropWidth / cropHeight;
 
-    <script src="/js/resize.js">
+        updateCropArea();
 
+        function updateCropArea() {
+            cropArea.style.width = cropWidth + 'px';
+            cropArea.style.height = cropHeight + 'px';
+            cropArea.style.left = cropX + 'px';
+            cropArea.style.top = cropY + 'px';
+            dimensionsDisplay.textContent = `Width: ${cropWidth}px, Height: ${cropHeight}px`;
+        }
+
+        function updateInputFields() {
+            document.getElementById('inputWidth').value = cropWidth;
+            document.getElementById('inputHeight').value = cropHeight;
+            document.getElementById('inputCropX').value = cropX;
+            document.getElementById('inputCropY').value = cropY;
+        }
+
+        document.addEventListener('keydown', (event) => {
+            switch (event.key) {
+                case 'ArrowUp': cropY -= 5; break;
+                case 'ArrowDown': cropY += 5; break;
+                case 'ArrowLeft': cropX -= 5; break;
+                case 'ArrowRight': cropX += 5; break;
+                case 'w':
+                    cropHeight += 5; 
+                    cropWidth = cropHeight * aspectRatio; 
+                    break;
+                case 's':
+                    cropHeight = Math.max(5, cropHeight - 5); 
+                    cropWidth = cropHeight * aspectRatio; 
+                    break;
+                case 'a':
+                    cropWidth = Math.max(5, cropWidth - 5); 
+                    cropHeight = cropWidth / aspectRatio; 
+                    break;
+                case 'd':
+                    cropWidth += 5; 
+                    cropHeight = cropWidth / aspectRatio; 
+                    break;
+            }
+            updateCropArea();
+            updateInputFields();
+        });
+
+        resetButton.addEventListener('click', () => {
+            cropWidth = 300;
+            cropHeight = 200;
+            cropX = 100;
+            cropY = 50;
+            updateCropArea();
+            updateInputFields();
+        });
+
+        cropButton.addEventListener('click', () => {
+            canvas.width = cropWidth;
+            canvas.height = cropHeight;
+            ctx.drawImage(video, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+            const croppedImage = canvas.toDataURL('image/png');
+            const previewWindow = window.open('', '_blank');
+            previewWindow.document.write(`<img src="${croppedImage}" alt="Cropped Preview" />`);
+        });
+
+        document.getElementById('setDimensions').addEventListener('click', () => {
+            cropWidth = parseInt(document.getElementById('inputWidth').value) || cropWidth;
+            cropHeight = parseInt(document.getElementById('inputHeight').value) || cropHeight;
+            cropX = parseInt(document.getElementById('inputCropX').value) || cropX;
+            cropY = parseInt(document.getElementById('inputCropY').value) || cropY;
+            updateCropArea();
+            updateInputFields();
+        });
     </script>
 </body>
 </html>

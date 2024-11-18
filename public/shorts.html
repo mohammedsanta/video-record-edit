@@ -4,22 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube Shorts Video Editor</title>
-    <link rel="stylesheet" href="style/shorts.css">
+    <link rel="stylesheet" href="/style/shorts.css">
 </head>
 <body>
-    <div class="container">
-        <h1>YouTube Shorts Video Editor</h1>
+
+<!-- Modal for video selection -->
+<div id="videoSelectionModal" class="modal">
+    <div class="modal-content">
+        <h2>Select Video Source</h2>
+        <button id="uploadOptionBtn">Upload New Video</button>
+        <button id="chooseExistingOptionBtn">Choose from Existing Videos</button>
+    </div>
+</div>
+
+<!-- Main Container -->
+<div class="container">
+    <h1>YouTube Shorts Video Editor</h1>
+
+    <!-- Upload Form -->
+    <div id="uploadSection" class="upload-section">
         <form id="uploadForm" method="POST" enctype="multipart/form-data">
             <div class="drop-zone" id="dropZone">
                 <p>Drag & Drop your video file here or click to select</p>
                 <input type="file" id="videoInput" name="video" accept="video/*" style="display: none;">
             </div>
-            
+
             <div class="radio-group">
                 <label><input type="radio" name="editOption" value="rotating"> Rotating</label>
                 <label><input type="radio" name="editOption" value="padding"> Padding</label>
                 <label><input type="radio" name="editOption" value="scaling"> Scaling</label>
-                <label><input type="radio" name="editOption" value="croping"> Cropping</label>
+                <label><input type="radio" name="editOption" value="cropping"> Cropping</label>
             </div>
 
             <p id="error" class="error">Please Select Type of Reformate Dimensions</p>
@@ -31,10 +45,40 @@
                 </button>
             </div>
         </form>
-        <video id="preview" controls></video>
-        
-        <script src="/js/shorts.js">
-        </script>
     </div>
+
+    <!-- Existing Video Selection Section (Initially Hidden) -->
+    <div id="existingVideosSection" class="existing-videos-section" style="display: none;">
+        <h2>Select a Video from Your Library</h2>
+
+        <form id="uploadForm" method="POST" action="/shorts/library">
+            <div class="radio-group">
+                <label><input type="radio" name="editOption" value="rotating"> Rotating</label>
+                <label><input type="radio" name="editOption" value="padding"> Padding</label>
+                <label><input type="radio" name="editOption" value="scaling"> Scaling</label>
+                <label><input type="radio" name="editOption" value="cropping"> Cropping</label>
+            </div>
+            <input type="hidden" id="video-select" name="video">
+
+            <p id="error" class="error">Please Select Type of Reformate Dimensions</p>
+            
+            <div class="button-container">
+                <button id="processButton" type="submit">
+                    <span class="button-text">Process Video</span>
+                    <div id="loadingSpinner" class="loading-spinner"></div>
+                </button>
+            </div>
+        </form>
+
+        <div id="videoList">
+            <!-- Dynamically filled with user's existing videos -->
+        </div>
+        
+    </div>
+
+    <video id="preview" controls></video>
+</div>
+
+    <script src="/js/shorts.js"></script>
 </body>
 </html>

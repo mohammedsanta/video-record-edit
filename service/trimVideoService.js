@@ -11,6 +11,9 @@ exports.codetrim = (inputFilePath = 'test.mp4',outputFilePath = 'output.mp4',cut
     
     crop.length > 0 ? crop = `;[outv]crop=${dimensions[0]}:${dimensions[1]}:${dimensions[2]}:${dimensions[3]}[outv]` : '' ;
 
+    console.log('cropcrop',crop)
+
+
     if(cuts[0].length == 1) {
 
         addVolume = `volume=${volume}`;

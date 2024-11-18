@@ -28,17 +28,40 @@ startBtn.onclick = async () => {
         }
     };
 
-    mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: 'video/webm' });
-        recordedVideo.src = URL.createObjectURL(blob);
-        recordedVideo.style.display = 'block'; // Show recorded video
-        recordedVideo.play();
-        recordedChunks = [];
+    mediaRecorder.onstop = async () => {
+      const blob = new Blob(recordedChunks, { type: 'video/webm' });
+      recordedVideo.src = URL.createObjectURL(blob);
+      recordedVideo.style.display = 'block'; // Show recorded video
+      recordedVideo.play();
+      recordedChunks = [];
+      
+      // Stop all tracks of the stream
+      screenStream.getTracks().forEach(track => track.stop());
+      previewVideo.srcObject = null; // Clear preview
+      previewVideo.style.display = 'none'; // Hide preview
+
+      // Send the video blob to the server
+      const formData = new FormData();
+      formData.append('video', blob, 'recording.webm'); // Append the blob
+
+      console.log(formData)
+
+      try {
+        const response = await fetch('/upload/video', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
         
-        // Stop all tracks of the stream
-        screenStream.getTracks().forEach(track => track.stop());
-        previewVideo.srcObject = null; // Clear preview
-        previewVideo.style.display = 'none'; // Hide preview
+        const result = await response.json();
+        console.log('Success:', result);
+      } catch (error) {
+        console.error('Error uploading video:', error);
+      }
+
     };
 
     mediaRecorder.start();

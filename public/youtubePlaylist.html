@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Playlist Formats</title>
+    <link rel="stylesheet" href="/style/downloadPlaylist.css">
+</head>
+<body>
+    <h1>YouTube Playlist Formats</h1>
+    <form id="playlistForm">
+        <label for="playlistUrl">Enter Playlist URL:</label>
+        <input type="text" id="playlistUrl" placeholder="e.g., https://www.youtube.com/playlist?list=..." required>
+        <button type="submit">Get Formats</button>
+    </form>
+
+    <h2>Formats</h2>
+    <table id="formatsTable">
+        <thead>
+            <tr>
+                <th>Video ID</th>
+                <th>Video Format</th>
+                <th>Select Video</th>
+                <th>Audio Format</th>
+                <th>Select Audio</th>
+            </tr>
+        </thead>
+        <tbody id="formatsTableBody"></tbody>
+    </table>
+
+    <button id="submitFormats" style="margin-top: 20px;">Submit Selected Formats</button>
+    <div class="error" id="errorMessage" style="display: none;"></div>
+
+    <div class="spinner-overlay" id="loadingSpinnerOverlay">
+        <div class="spinner" id="loadingSpinner"></div>
+    </div>
+
+    <script src="/js/downloadPlaylist.js">
+    </script>
+</body>
+</html>

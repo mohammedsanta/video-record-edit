@@ -36,15 +36,18 @@ const createFolder = (username) => {
 const storage = multer.diskStorage({
     destination: 'uploads/',
     filename: async function (req,file,cb) {
-        // console.log(file)
-
         await titleValidation(req);
 
         const getToken = req.cookies.token;
         const user = verifyToken(getToken);
+        req.body.videoCheck = true;
+
+        if(!req.body.title) {
+            req.body.title = Date.now();
+        }
 
         createFolder(user.username)
-
+        
         cb(null, `/${user.username}/${req.body.title}-${user.id}.mp4` )
     }
 });

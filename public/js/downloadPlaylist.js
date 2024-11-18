@@ -19,7 +19,7 @@ form.addEventListener('submit', async (e) => {
     formatsTableBody.innerHTML = ''; // Clear previous data
     showSpinner(); // Show spinner
 
-    const response = await fetch('http://127.0.0.1:3000/playlist', {
+    const response = await fetch('http://127.0.0.1:3000/youtube/playlist', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

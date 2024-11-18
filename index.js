@@ -1,7 +1,7 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 
-const youtube = require('./routes/formatToYoutubeShorts');
+const formatToYoutubeShorts = require('./routes/formatToYoutubeShorts');
 const getFromVideo = require('./routes/getFromVideo');
 const trim = require('./routes/trim');
 const convert = require('./routes/convert');
@@ -10,6 +10,7 @@ const load = require('./routes/load');
 const public = require('./routes/public');
 const auth = require('./routes/auth');
 const video = require('./routes/video');
+const youtube = require('./routes/youtube');
 const session = require('./routes/session');
 const cors = require('cors');
 const { connection } = require('./config/db');
@@ -29,8 +30,9 @@ app.use(cookieParser());
 
 app.use('/auth',auth)
 app.use('/',video)
+app.use('/youtube',youtube)
 app.use('/',session)
-app.use('/shorts',youtube);
+app.use('/shorts',formatToYoutubeShorts);
 app.use('/video',getFromVideo)
 app.use('/cut',trim)
 app.use('/convert',convert)

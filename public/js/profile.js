@@ -123,7 +123,7 @@ function resetEditMode(videoId) {
 async function handleDelete(videoId) {
     if (confirm('Are you sure you want to delete this video?')) {
         try {
-            const response = await fetch(`http://127.0.0.1:3000/video/${videoId}`, {
+            const response = await fetch(`/video/delete/${videoId}`, {
                 method: 'DELETE',
             });
 
@@ -187,10 +187,13 @@ function playVideo(videoId) {
         console.log(video)
         // Create a video element
         const videoElement = document.createElement('video');
-        videoElement.src = `http://127.0.0.1:3000/video/${video._id}`; // Assuming video.url holds the video path
+        videoElement.src = `/video/${video._id}`; // Assuming video.url holds the video path
         videoElement.controls = true;
+        videoElement.classList.add('play-video');
         videoElement.style.width = '100%'; // Set width as needed
         videoElement.style.maxWidth = '600px'; // Max width
+        videoElement.style.maxHeight = '600px'; // Max width
+        videoElement.style.minHeight = '100px'; // Max width
 
         // Create a container to hold the video
         const modalVideo = document.createElement('div');
@@ -528,7 +531,7 @@ document.getElementById("createSessionBtn").onclick = function() {
     if (title) {
         // Count the existing session boxes to generate a new ID
         const sessionBoxes = document.querySelectorAll(".session-box");
-        const newId = sessionBoxes.length + 1; // Generate a new ID based on the count
+        // const newId = sessionBoxes.length + 1; // Generate a new ID based on the count
 
         // Example API endpoint
         const apiUrl = 'http://127.0.0.1:3000/session/create';
@@ -550,21 +553,23 @@ document.getElementById("createSessionBtn").onclick = function() {
         .then(data => {
             console.log("New session created:", data);
             // Append the new session box using the generated ID
-            const sessionContainer = document.getElementById("sessions");
+            const sessionContainer = document.getElementById("session-boxes");
             const newSessionBox = document.createElement("div");
             newSessionBox.className = "session-box";
+            const newId = data.newSession._id
             newSessionBox.innerHTML = `
                 <h2 id="title-${newId}">${title}</h2>
+                <input type="text" id="input-${newId}" class="edit-input" style="display:none;">
                 <div class="session-btn-container">
-                    <button class="button show-details" data-session-id="${newId}">Show Details</button>
+                    <button class="button show-details" onclick="fetchVideos('${newId}')" data-session-id="${newId}">Show Details</button>
                     <button class="button edit-button" data-session-id="${newId}">Edit Title</button>
                     <button class="button save-btn" id="save-${newId}" style="display:none;" data-session-id="${newId}">Save</button>
                     <button class="button delete-button" data-session-id="${newId}">Delete</button>
-                    <button class="button join-button" data-session-id="${newId}">Join</button>
+                    <button class="button join-button" onclick="butJoinSession('${newId}')" data-session-id="${newId}">Join</button>
                 </div>
             `;
             sessionContainer.appendChild(newSessionBox);
-            closeModal(); // Close the modal
+            closeSessionModal(); // Close the modal
         })
         .catch(error => {
             console.error("Error creating session:", error);
@@ -698,5 +703,68 @@ const closeFormModal = () => {
     ele.style.display = 'none';
 }
 
-// Optionally show the first section by default
-showSection('personalData');
+
+// 
+
+document.getElementById('openModal').onclick = function() {
+    document.getElementById('modalsettings').style.display = 'flex';
+}
+
+document.getElementById('closeModal').onclick = function() {
+    document.getElementById('modalsettings').style.display = 'none';
+}
+
+document.getElementById('editButton').onclick = function() {
+    // Show the form and hide the user data display
+    document.getElementById('user-data').classList.add('hidden');
+    document.getElementById('settings-form').classList.remove('hidden');
+
+    // Set input values to current text
+    document.getElementById('username').value = document.getElementById('username-text').innerText;
+    document.getElementById('email').value = document.getElementById('email-text').innerText;
+}
+
+// Handle form submission
+document.getElementById('settings-form').onsubmit = function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    const updatedUsername = document.getElementById('username').value;
+    const updatedEmail = document.getElementById('email').value;
+
+    // Use fetch to send updated data to the server
+    fetch('/api/updateUserSettings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: updatedUsername, email: updatedEmail }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log('Success:', data);
+        // Update displayed text with the new values
+        document.getElementById('username-text').innerText = updatedUsername;
+        document.getElementById('email-text').innerText = updatedEmail;
+        // Hide the form and show the user data display
+        document.getElementById('user-data').classList.remove('hidden');
+        document.getElementById('settings-form').classList.add('hidden');
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+// Cancel button functionality
+document.getElementById('cancel-button').onclick = function() {
+    // Hide the form and show the user data display
+    document.getElementById('user-data').classList.remove('hidden');
+    document.getElementById('settings-form').classList.add('hidden');
+}
+
+// Close the modal when clicking outside of it
+window.onclick = function(event) {
+    const modal = document.getElementById('modalsettings');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}

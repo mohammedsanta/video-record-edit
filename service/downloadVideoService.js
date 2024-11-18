@@ -4,6 +4,8 @@ const fs = require('fs');
 const path = require('path');
 const asyncHandler = require('express-async-handler');
 const { stdout, stderr } = require('process');
+const { verifyToken } = require('../utils/createToken');
+const Video = require('../model/video');
 
 // get title
 
@@ -160,6 +162,73 @@ exports.downloadPlaylist = asyncHandler(async (req,res,next) => {
     });
 
     // res.send('?')
+
+})
+
+exports.saveVideo = asyncHandler(async (req,res,next) => {
+    
+    const { videoFormat, audioFormat, url } = req.body;
+
+    // title of video is depends on user and the title which he typed
+    const title = `title-` + Date.now();
+
+    // Construct the output path with the specified filename
+    const outputFilePath = path.join(__dirname, '../outputs/' , `${title}.mp4`);
+    const uploadsPath = path.join( __dirname, `/../uploads/` );
+    const data = verifyToken(req.cookies.token)
+    console.log(data)
+    const userPath = `${uploadsPath}/${data.username}/${title}.mp4`;
+
+    if(!fs.existsSync(uploadsPath)) {
+        fs.mkdir(dirPath, { recursive: true }, (err) => {
+            if (err) {
+              console.error('Error creating directory:', err);
+            } else {
+              console.log('Directory created successfully!');
+            }
+          });
+    }
+
+    const ytDlp = spawn('yt-dlp', [
+        '-f', `${videoFormat}+${audioFormat}`, // Combine video and audio formats
+        url,
+        '--output', outputFilePath, // Specify output filename format with path
+    ]);
+
+    ytDlp.stdout.on('data', (data) => {
+        console.log(`stdout: ${data}`);
+    });
+
+    ytDlp.stderr.on('data', (data) => {
+        console.error(`stderr: ${data}`);
+    });
+
+    ytDlp.on('close', (code) => {
+        console.log(`child process exited with code ${code}`);
+        if (code === 0) {
+            // Send the processed file to the user
+            // if(fs.existsSync(outputFilePath)) {
+            // Source and destination paths
+
+            // Move the file
+            fs.rename(outputFilePath, userPath, (err) => {
+            if (err) {
+                console.error('Error moving file:', err);
+            } else {
+                console.log('File moved successfully!');
+            }
+            });
+            
+        } else {
+            res.status(500).json({ error: 'Download failed' });
+        }
+    });
+
+    const saveVideo = await Video.create({
+        username: data.id,
+        title,
+        path: `${title}.mp4`,
+    });
 
 })
 
